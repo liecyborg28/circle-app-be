@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int @id @default(autoincrement())
+  username      String @unique
+  full_name     String
+  email         String @unique
+  password      String
+  photo_profile String
+  bio           String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now())
+  
+  created_by    Int
+  updated_by    Int
+
+  // relasi self untuk created/updated
+  createdBy     User   @relation("UserCreatedBy", fields: [created_by], references: [id])
+  updatedBy     User   @relation("UserUpdatedBy", fields: [updated_by], references: [id])
+  createdUsers  User[] @relation("UserCreatedBy")
+  updatedUsers  User[] @relation("UserUpdatedBy")
+
+  // relasi follow system
+  followers     Following[] @relation("UserFollowers")
+  following     Following[] @relation("UserFollowing")
+
+  likesCreated  Like[] @relation("LikeCreatedBy")
+  likesUpdated  Like[] @relation("LikeUpdatedBy")
+
+  threadsCreated Thread[] @relation("ThreadCreatedBy")
+  threadsUpdated Thread[] @relation("ThreadUpdatedBy")
+
+  replies        Reply[]  @relation("ReplyUser")
+  repliesCreated Reply[]  @relation("ReplyCreatedBy")
+  repliesUpdated Reply[]  @relation("ReplyUpdatedBy")
+}
+
+model Following {
+  id           Int  @id @default(autoincrement())
+  following_id Int
+  follower_id  Int
+
+  following    User @relation("UserFollowing", fields: [following_id], references: [id])
+  follower     User @relation("UserFollowers", fields: [follower_id], references: [id])
+}
+
+model Like {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  thread_id  Int
+  created_at DateTime @default(now())
+  created_by Int
+  updated_at DateTime @default(now())
+  updated_by Int
+
+  createdBy  User @relation("LikeCreatedBy", fields: [created_by], references: [id])
+  updatedBy  User @relation("LikeUpdatedBy", fields: [updated_by], references: [id])
+}
+
+model Thread {
+  id               Int       @id @default(autoincrement())
+  content          String
+  image            String?
+  number_of_replies Int      @default(0)
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @default(now())
+  created_by       Int
+  updated_by       Int
+
+  // Relations
+  createdBy  User   @relation("ThreadCreatedBy", fields: [created_by], references: [id])
+  updatedBy  User   @relation("ThreadUpdatedBy", fields: [updated_by], references: [id])
+  replies    Reply[]
+}
+
+model Reply {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  thread_id  Int
+  image      String?
+  content    String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  created_by Int
+  updated_by Int
+
+  // Relations
+  user      User   @relation("ReplyUser", fields: [user_id], references: [id])
+  thread    Thread @relation(fields: [thread_id], references: [id])
+  createdBy User   @relation("ReplyCreatedBy", fields: [created_by], references: [id])
+  updatedBy User   @relation("ReplyUpdatedBy", fields: [updated_by], references: [id])
+}

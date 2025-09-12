@@ -1,0 +1,28 @@
+{
+  "name": "circle-app-be",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tes-node-dev --respawn src/app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/joi": "^17.2.2",
+    "@types/multer": "^2.0.0",
+    "express-rate-limit": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "path": "^0.12.7"
+  }
+}
