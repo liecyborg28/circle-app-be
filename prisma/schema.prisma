@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -16,21 +10,21 @@ datasource db {
 
 model User {
   id            Int @id @default(autoincrement())
-  username      String @unique
-  full_name     String
+  username      String? @unique
+  full_name     String?
   email         String @unique
   password      String
-  photo_profile String
-  bio           String
+  photo_profile String?
+  bio           String?
   created_at    DateTime @default(now())
   updated_at    DateTime @default(now())
   
-  created_by    Int
-  updated_by    Int
+  created_by    Int?
+  updated_by    Int?
 
   // relasi self untuk created/updated
-  createdBy     User   @relation("UserCreatedBy", fields: [created_by], references: [id])
-  updatedBy     User   @relation("UserUpdatedBy", fields: [updated_by], references: [id])
+  createdBy     User?   @relation("UserCreatedBy", fields: [created_by], references: [id])
+  updatedBy     User?   @relation("UserUpdatedBy", fields: [updated_by], references: [id])
   createdUsers  User[] @relation("UserCreatedBy")
   updatedUsers  User[] @relation("UserUpdatedBy")
 
