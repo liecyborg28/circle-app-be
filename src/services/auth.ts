@@ -24,7 +24,7 @@ export async function login(model: LoginModel) {
   const isMatch = await bcrypt.compare(model.password, user.password);
   if (!isMatch) throw new Error("Wrong password.");
 
-  const token = signToken({ id: user?.id, role: user?.role });
+  const token = signToken({ id: user?.id });
   return {
     user_id: user?.id,
     username: user?.username,

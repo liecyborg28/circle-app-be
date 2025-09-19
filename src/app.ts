@@ -4,6 +4,8 @@ import path from "path";
 import limiter from "./middlewares/limiter";
 import router from "./routes/routes";
 import { AppError } from "./models/error";
+import http from "http";
+import { Server } from "socket.io";
 
 const app = express();
 
@@ -31,6 +33,31 @@ app.use((err: AppError, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`server is running on ${process.env.PORT}`);
+// app.listen(process.env.PORT, () => {
+//   console.log(`server is running on ${process.env.PORT}`);
+// });
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
 });
+
+io.on("connection", (socket) => {
+  console.log("🔌 Socket connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("❌ Socket disconnected:", socket.id);
+  });
+});
+
+server.listen(process.env.PORT, () => {
+  console.log(`🚀 Server running on ${process.env.PORT}`);
+});
+
+export { io }; // <--- ini penting
+export { server };
+export default app;

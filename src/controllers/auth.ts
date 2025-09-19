@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { register, login } from "../services/auth";
 // import { prisma } from "../connections/prisma";
 import { loginSchema, registerSchema } from "../validations/auth";
-import { LoginModel, RegisterModel } from "../models/auth";
+import { LoginModel, RegisterModel, TokenModel } from "../models/auth";
 import { signToken } from "../utils/jwt";
 
 export async function handleRegister(
@@ -29,12 +29,11 @@ export async function handleRegister(
 
     const user: any = await register(payload);
 
-    const loginModel: LoginModel = {
-      email: user?.email,
-      password: user?.password,
+    const tokenModel: TokenModel = {
+      id: user?.id,
     };
 
-    const token = signToken(loginModel);
+    const token = signToken(tokenModel);
 
     const userData = {
       user_id: user?.id,

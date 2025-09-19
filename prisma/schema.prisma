@@ -66,14 +66,14 @@ model Like {
 }
 
 model Thread {
-  id               Int       @id @default(autoincrement())
-  content          String
-  image            String?
+  id                Int       @id @default(autoincrement())
+  content           String?
+  image             String?
   number_of_replies Int      @default(0)
-  created_at       DateTime  @default(now())
-  updated_at       DateTime  @default(now())
-  created_by       Int
-  updated_by       Int
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @default(now())
+  created_by        Int
+  updated_by        Int
 
   // Relations
   createdBy  User   @relation("ThreadCreatedBy", fields: [created_by], references: [id])
@@ -86,7 +86,7 @@ model Reply {
   user_id    Int
   thread_id  Int
   image      String?
-  content    String
+  content    String?
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
   created_by Int
