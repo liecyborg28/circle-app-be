@@ -74,7 +74,7 @@ export async function handleLogin(
       password,
     };
 
-    const user = await login(payload);
+    const user = await login(req, res, payload);
 
     res.status(200).json({
       code: 200,

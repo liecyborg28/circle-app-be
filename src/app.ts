@@ -22,6 +22,14 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // routes
 app.use(router);
 
+app.use((req, res, next) => {
+  res.status(404).json({
+    code: 404,
+    status: "error",
+    message: "Route not found",
+  });
+});
+
 // middleware error handler (paling bawah)
 app.use((err: AppError, req: Request, res: Response, next: NextFunction) => {
   console.error("Error middleware:", err);
