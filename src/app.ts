@@ -6,6 +6,7 @@ import router from "./routes/routes";
 import { AppError } from "./models/error";
 import http from "http";
 import { Server } from "socket.io";
+import { swaggerDocs } from "../src/utils/swagger";
 
 const app = express();
 
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+swaggerDocs(app);
 
 // routes
 app.use(router);
